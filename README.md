@@ -1,4 +1,4 @@
-# Replication of "Environmental Regulations, Air and Water Pollution, and Infant Mortality in India" (Greenstone and Hanna, 2014)
+# Replication of "Environmental Regulations, Air and Water Pollution, and Infant Mortality in India"
 
 This is the final project repository for **PUBPOL 870K: Statistics & Program Evaluation** at Duke Kunshan University, Fall 2021
 
