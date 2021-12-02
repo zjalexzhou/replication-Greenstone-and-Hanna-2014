@@ -1,0 +1,194 @@
+---
+title: "Replication Work of Greenstone & Hanna (2014) and Preliminary Exploration of the Effect of 2008 Economic Crisis on the Performance of India’s Environmental Regulations"
+author: "Yixin Fang, Yiming Li, Xinkai Wang, Weichen Xu, Zhijie Zhou"
+date: "PUBPOL 870K Final Project Manuscript, Fall 2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning=FALSE, error=FALSE, message=FALSE, fig.height=3,fig.width=3, fig.align = "center")
+```
+
+---
+
+```{r environment}
+# Import necessary libraries for the program
+library(foreign)
+library(ggplot2)
+library(dplyr)
+# for "lincom" method used in 2nd-stage regression to test the five-year effects of policies
+library(biostat3) 
+library(kableExtra)
+
+# Disable scientific notation for data within 200 digits for better display
+options(scipen = 200)
+
+# Set up reference to pre-packaged functions for the program
+source("./R-Code/main-functions.R")
+source("./R-Code/plot-functions.R")
+source("./R-Code/extension-functions.R")
+
+# Necessary "names" to match each policy outcome with the corresponding column for data processing
+air = c("SPM", "NO2", "SO2")
+water = c("BOD", "LNFCOLI", "DO")
+IM = c("IM_CAT")
+AllOutcomes <- c(air, water, IM)
+```
+
+**Abstract.** Inspections of environmental regulation effects in developing countries are important. Greenstone & Hanna (2014) took a deep insight into the performance of India’s air and water regulations, including the Supreme Court Action Plans (SCAP), the Catalytic Converter Policies (CAT), and the National River Conservation Plan (NRCP). The authors applied a difference-in-difference (DID) design using a two-stage econometric approach based on their organized city-level panel data for the years 1986-2007.  Results have shown the association between the catalytic converter policies and substantial improvement in air quality, while no measurable benefits have been found for water regulations. In addition, the authors determined a modest relationship between the decline in infant mortality rate and successful air regulations, though the relationships were not statistically significant. The parallel-trend assumption for DID was tested by Quandt Likelihood Ratio (QLR). We managed to use the R language to replicate their main findings and apply a preliminary DID approach to study the effects of the 2008 Economic Crisis on the effects of air policies. Only CAT was still likely to sustain their influence albeit disturbed by the crisis. Further research may take spatial insights and systematic homogeneity among cities in response to policies or events into consideration.
+
+*This replication project is made available on GitHub by Zhijie Zhou:* https://github.com/zjalexzhou/replication-Greenstone-and-Hanna-2014
+
+---
+
+# Introduction
+
+Environmental protection, including reducing greenhouse gas emissions, is one of the most beneficial practices for developing countries. According to the survey, India's economy is growing at $6.4%$ per year, putting enormous pressure on the environment. For India, environmental protection and economic development are not in balance. This article assesses India's environmental protection and environmental law based on air pollution, water pollution, environmental regulations, and infant mortality. India provides a compelling setting to explore the efficacy of environmental regulations for several reasons:
+
+- India has large number of population.
+
+- It has been experiencing rapid economic growth of about 6.4 % annually over the last two decades (much pressure on the environment).
+
+- India is widely regarded as having suboptimal regulatory institutions; we can test the advantages and disadvantages of Indian environmental policies.
+
+- India has a rich history of environmental regulations that dates back to the 1970s, so we would have a larger data range to see the environmental effects.
+
+We care about policy effects in India also because we could learn from India's lessons for China's environmental regulations. Both China and India have received extensive attention from the central government regarding the status of air pollution. Both countries prefer the control of vehicle emissions. However, the Chinese government has defined regulations to reduce the number of cars on the road. In contrast to the Indian government, the Chinese government has focused more on the root causes of pollutants while the Indian government has pursued regulatory and ameliorative measures (Feng, 2020; Library of Congress, 2018; Ganguly, 2020). In comparison with the water management policies of China and India, they both focus on restoration of river ecosystems and reduction of pollutant discharges. However, China's water pollution control policies are more effective because the Chinese government has strict regulations and penalties that make it more costly to violate the law, whereas India does not (Schrag, 2020; Samad et al., 2015; Krishan et al., 2019).
+
+In Greenstone and Hanna (2014), the analysis of PM, SO2, and NO2 concentrations shows that the Indian government's installation of catalytic converters on vehicles has effectively reversed the trend of increasing pollution concentrations. It can be concluded that catalytic converter policy is closely related to the reduction of air pollution. From the data, the rapid growth rate of environmental pollution concentration before the implementation of catalytic converter policy by the Indian government. On the contrary, the growth rate of environmental pollution concentration was significantly reduced after implementing the catalyst policy. Comparing the data of BOD, FColi, and DO, the National River Conservation Program (NRCP) effectively treats and improves water pollution. Although the NRCP mainly focuses on improving domestic pollution, the data show that FColi has not been significantly improved, which might be due to the lack of federal or state funding for municipalities, which has resulted in only $82$ of the $152$ approved wastewater treatment plants being built. Infant mortality is measured as a method of evaluating air and water pollution policies. However, this article does not take into account the influence of the infant's parents and some extraneous factors.
+
+We attempt to use R to replicate the main findings with the DID method, i.e., whether the implemented air/water policies had effects on the corresponding environmental qualities or infant mortality rates based on the investigation of shifting means or trends of several pollutant concentrations, including: 
+
+- First-step (event study): measure the average annual pollution concentration in the years before and after a policy’s implementation. 
+
+- Second-step (trend break): whether the policies are associated with pollution reductions with mean shift in pollution concentrations after a policy’s implementation and a policy’s impact evolving over time. 
+
+- Quandt likelihood ratio (QLR) Test as robustness check.
+
+Based on the replication findings, we also would like to apply the authors’ methodologies on air quality, water quality, and infant mortality data of India after 2007 to test if the conclusions still hold true in more recent settings. We have collected air pollution and infant mortality data from 2009 to 2019 for further insights (reliable sources of water pollution data have not been found yet). Based on our preliminary findings, only CAT policy was still likely to sustain their influence albeit disturbed by the crisis. More insights into the environmental conditions, spatial clustering and systematic homogeneity among cities in response to policies or events may be helpful to answer similar questions.
+
+# Methods
+
+## Data Wrangling
+
+```{r data-import}
+# For air pollution policies (SCAP & Catalytic converter)
+dat_air <- read.dta("./Data-Replication/Air/combined.dta", 
+                    convert.factors=NA) %>%
+  mutate(city_id = as.numeric(factor(city)))
+# For water pollution policies (NRCP)
+dat_water <- read.dta("./Data-Replication/Water/india_waters_cityyear.dta",
+                      convert.factors=NA) %>%
+  mutate(cityriver = paste(city,river))
+# For infant mortality rate data (with Catalytic Converter Policy)
+dat_IM_air <- read.dta("./Data-Replication/IM/im_air.dta") %>%
+  mutate(city_id = as.numeric(factor(city)))
+
+# For preliminary extension (effects of 2008 Economic Crisis on environmental regulation effects)
+dat_ext <- read.csv("./Data-Extension/data1990_2015.csv")
+```
+
+## Difference-in-Difference (DID) Design
+
+The authors used a Difference-in-difference experimental design with the pollution and infant mortality data as observational study data, comparing the differential effect of a treatment on a 'treatment group' (those cities adopted any pollution control policy) versus a 'control group' (those cities never adopted such policies). The method calculated the effect of a treatment on an outcome by comparing the average change over time in the outcome variable for the treatment group to the average change over time for the control group. Table 1 attached is a simple demonstration for the process and logic of DID design adapted from the work of our classmate Min Hu:
+
+*Table 1. DID Quasi-experiment Process*
+
+|                 | Before Policy Adoption | After Policy Adoption | Difference in Estimates |
+| ----------------------- | ---------------------- | --------------------- | ----------------------- |
+| Treatment Group | $\beta_0+\beta_1$      | $\beta_0+\beta_1+\beta_2+\beta_3$| $\beta_2+\beta_3$ |
+| Control Group   | $\beta_0$              | $\beta_0+\beta_2$     | $\beta_2$               |
+| Difference in Estimates | $\beta_1$     | $\beta_1+\beta_3$     | $\beta_3$ (DID)         |
+
+
+## First-stage Regression: Event Study
+
+```{r first-stage-reg}
+# Data Cleaning & Event Study (1st Stage Regression)
+# loop through all outcomes
+for(outcome in AllOutcomes){
+  assign(paste0(outcome, "_sigmas"), Present_1_Stage_Results(outcome, Perform_Regression_1(outcome, Clean_Data_For_Regression(outcome))))
+}
+```
+
+## Second-stage Regression: Mean Shift
+
+```{r second-stage-reg}
+# Mean Shift & Trend Break (2nd Stage Regression)
+# loop through event study results for all outcomes
+for(outcome in AllOutcomes){
+  assign(paste0(outcome, "_trend_estimates"), 
+         Present_2_Stage_Results(outcome, Perform_Regression_2(outcome, get(paste0(outcome, "_sigmas")))))
+}
+```
+
+## Quandt Likelihood Ratio (QLR) Test for DID Assumption
+
+```{r qlr}
+QLR_results <- rbind(Test_QLR('SPM'), Test_QLR('SO2'), Test_QLR('NO2'),
+                     Test_QLR('BOD'), Test_QLR('LNFCOLI'), Test_QLR('DO'),
+                     Test_QLR('IM_CAT'))
+```
+
+## DID for Effects of the 2008 Economic Crisis
+
+We noticed that Greenstone and Hanna (2014) did not mention why they only include the years from 1987 to 2007, even though the study was done in 2011. As we know, 2008 is the economic crisis year. We want to see whether the trends of air pollutants are significantly different before and after the crisis, and whether the air policies are continuously effective in decreasing air pollutants. We used a simplified DID approach to analyze the air quality before and after the 2008 economic crisis. As shown in table X, we collected air data on SO2, NO2, and SPM from 1990 to 2015. Then we divided the cities into four categories, including those cities only implemented SCAP, those only implemented CAT, those implemented both, and those have adopted neither. We used the year of 2008 as a potential break-point for the DID analysis.
+
+## Structure of Program
+
+# Results
+
+## Event Study Estimates
+
+## Mean Shift Estimtates
+
+## QLR Results
+
+
+
+## Effects of the 2008 Economic Crisis
+
+# Discussion
+
+## Sources of Discrepancies for Replication
+
+- **Not fully-documented data cleaning process**:
+
+- **No direct transcription of functions between STATA & R**:
+
+## Limitations of Greenstone & Hanna (2014)
+
+- **Bias in data collection:** Infant mortality After 1996, the city-level data were no longer compiled centrally. Many births and deaths are not registered in India and the available evidence suggests that this problem is greater for deaths, so the infant mortality rate is likely downward-biased. 
+
+- **Problems shown in results:** Event Study of Air Pollution Policies fail to reveal symmetry around a mean pollution concentration that would indicate that any of the three measured pollutants follow a mean reverting process. The regression estimate of Infant Mortality with respect to the catalytic converter policy is associated with a reduction in the infant mortality rate of 0.64 per 1,000 live births is imprecise and is not statistically significant. (Replicated) 
+
+- **Unresolved question:** The fundamental questions of the magnitudes of the marginal benefits and costs of regulation-induced emissions reductions and whether the benefits exceed the costs. Currently, there is very limited information on the costs and benefits of environmental regulations in developing countries and this is a rich area for future research.
+
+## Possible Effects of the 2008 Economic Crisis
+
+## Future Research Directions
+
+- **Spatial autocorrelation of air/water pollution & infant mortality of cities:** whether there are clusters of pollutant concentration, or whether cities under similar geographical contexts would have similar response to policies enforced. 
+
+- **Check whether the effects of the 2008 economic crisis are systematically homogeneous among cities in India reinforcing the validity of the DID assumption:** parallel trends between the control and treatment groups before the “treatment” / “event” takes place. 
+
+- **Update the full city panel data to include years beyond 2007:** We were only able to gather the city-year variables and the pollutants.
+
+# Reference
+
+Feng, Hao. 2020. "China releases 2020 action plan for air pollution." *China Dialogue*. Retrieved November 10, 2021 from https://chinadialogue.net/en/pollution/10711-china-releases-2-2-action-plan-for-air-pollution/
+
+Ganguly, Tanushree., Selvaraj, Kurinji. L., and Guttikunda, Sarath. K. 2020. "National Clean Air Programme (NCAP) for Indian cities: Review and outlook of clean air action plans." *Atmospheric Environment* X(8), 100096. 
+
+Greenstone, Michael, and Rema Hanna. 2014. "Environmental Regulations, Air and Water Pollution, and Infant Mortality in India." *American Economic Review*, 104 (10): 3038-72.
+
+Library of Congress. 2018. "China: 2020 Air Pollution Action Plan Released." *The Library of Congress*. Retrieved November 12, 2021 from https://www.loc.gov/item/global-legal-monitor/2018-08-16/china-2020-air-pollution-action-plan-released/
+
+Krishan Gopal, Surjeet Singh, Renoj J. Thayyen, N.C. Ghosh, S.P. Rai & Manohar Arora. 2020. "Understanding river – subsurface water interactions in upper Ganga basin, India." *International Journal of River Basin Management*. 18(2): 243-253.
+Samad, Muhammed. S. A., Varghese, George. K., and Alappat, Babu. J. 2015. "Environmental Forensics in India – Four Years after the National Green Tribunal Act, 2010." *Procedia Environmental Sciences*, 30: 91–96. 
+
+Schrag, J. 2020. "How Does Water Security Affect China’s Development?" *ChinaPower Project*. Retrieved November 17, 2021 from https://chinapower.csis.org/china-water-security/
+
+Subbiah, Vishal. 2017. "India Air Quality Data: India's air pollution levels over the years." *Kaggle*, Dataset, version 1. Retrieved November 10, 2021 from https://www.kaggle.com/shrutibhargava94/india-air-quality-data.
+
+# Appendix
