@@ -35,7 +35,13 @@ library(biostat3) # ver 0.1.6
 
 ## Program Outline
 
+`main.R` --> Run all codes in this file.
 
+-------> `main-functions` : all functions needed to replicate the data analysis/regression tasks for the main replication program
+
+-------> `plot-functions` : all functions needed to visualize the results for the main replication program
+
+-------> `extension-functions`: all functions needed to go over the preliminary extension task (of the 2008 Economic Crisis as an event)
 
 ## Reference
 
