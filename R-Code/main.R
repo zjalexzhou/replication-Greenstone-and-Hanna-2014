@@ -1,6 +1,6 @@
 # ------------------------------------------------------------------------------------------------------
 # File: main.R 
-# Modified: Dec 2, 2021
+# Modified: Dec 3, 2021
 #
 # Replication of "Environmental Regulations, Air and Water Pollution, and Infant Mortality in India" (Greenstone and Hanna, 2014)
 # 
@@ -40,7 +40,6 @@
 library(foreign)
 library(ggplot2)
 library(dplyr)
-library(gridExtra)
 library(biostat3) # for "lincom" method used in 2nd-stage regression to test the five-year effects of policies
 
 # Disable scientific notation for data within 200 digits for better display
