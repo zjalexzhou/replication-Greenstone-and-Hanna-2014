@@ -96,7 +96,7 @@ Plot_Event_Study_Estimates <- function(input_outcome){
       plotTheme()
     
     CAT_plot <- CAT_plot + labs(caption = 'B.Effects of Catalytic Converters Policy on Particulate Matter')
-    png(file = paste0("./Plot/Results/", input_outcome,'_Event_Study_Estimates.png'), width=1800, height=900, res=72*3)
+    png(file = paste0("./Plot/Results_Generated_R/", input_outcome,'_Event_Study_Estimates.png'), width=1800, height=900, res=72*3)
     combined_plot <- grid.arrange(SC_plot, CAT_plot, ncol=2)
     # print(combined_plot)
     dev.off()
@@ -137,7 +137,7 @@ Plot_Event_Study_Estimates <- function(input_outcome){
       plotTheme()
     
     CAT_plot <- CAT_plot + labs(caption = 'B.Effects of Catalytic Converters Policy on Sulfur Dioxide')
-    png(file = paste0("./Plot/Results/", input_outcome,'_Event_Study_Estimates.png'), width=1800, height=900, res=72*3)
+    png(file = paste0("./Plot/Results_Generated_R/", input_outcome,'_Event_Study_Estimates.png'), width=1800, height=900, res=72*3)
     combined_plot <- grid.arrange(SC_plot, CAT_plot, ncol=2)
     # print(combined_plot)
     dev.off()
@@ -178,7 +178,7 @@ Plot_Event_Study_Estimates <- function(input_outcome){
       plotTheme()
     
     CAT_plot <- CAT_plot + labs(caption = 'B.Effects of Catalytic Converters Policy on Nitrogen Dioxide')
-    png(file = paste0("./Plot/Results/", input_outcome,'_Event_Study_Estimates.png'), width=1800, height=900, res=72*3)
+    png(file = paste0("./Plot/Results_Generated_R/", input_outcome,'_Event_Study_Estimates.png'), width=1800, height=900, res=72*3)
     combined_plot <- grid.arrange(SC_plot, CAT_plot, ncol=2)
     # print(combined_plot)
     dev.off()
@@ -233,7 +233,7 @@ Plot_Event_Study_Estimates <- function(input_outcome){
       scale_x_discrete(name = xlab_text, limits = x_limits) + 
       scale_y_continuous(name = ylab_text, breaks = y_breaks, limits = y_limits) + 
       plotTheme()
-    png(file = paste0("./Plot/Results/", input_outcome,'_Event_Study_Estimates.png'), width=1080, height=900, res=72*3)
+    png(file = paste0("./Plot/Results_Generated_R/", input_outcome,'_Event_Study_Estimates.png'), width=1080, height=900, res=72*3)
     plot_out <- plot + labs(caption = caption_)
     print(plot_out)
     dev.off()
@@ -263,7 +263,7 @@ Plot_Fstats <- function(input_outcome){
     outcomeplot = "Infant Mortality Rate"
   }
   
-  png(file = paste0("./Plot/Results/", input_outcome,'_Fstats.png'), width=1080, height=900, res=72*3)
+  png(file = paste0("./Plot/Results_Generated_R/", input_outcome,'_Fstats.png'), width=1080, height=900, res=72*3)
   Fplot <- as.data.frame(cbind(pot_breakpt, Fstats))
   a <- ggplot(data=Fplot) +
     geom_line(aes(pot_breakpt, Fstats), color="blue")+ 
