@@ -784,6 +784,7 @@ Present_2_Stage_Results <- function(input_outcome, trend_outcome){
          \n Please use one of the following: "SPM" "NO2" "SO2" "BOD" "LNFCOLI" "DO" "IM_CAT"')
     }
   }
+  save(tab, file = paste0("./Data-Replication/Results/", input_outcome, "_trend_estimates.RData"))
   return(tab)
 }
 
@@ -805,7 +806,7 @@ Test_QLR <- function(input_outcome){
   sigmas_bod <- read.dta("./Data-Replication/Water/sigmas_bod.dta")
   sigmas_lnfcoli <- read.dta("./Data-Replication/Water/sigmas_lnfcoli.dta")
   sigmas_do <- read.dta("./Data-Replication/Water/sigmas_do.dta")
-  load("./sigmas-IMCAT.RData")
+  # load("./sigmas-IMCAT.RData")s
   
   # For air policy outcomes
   sigmas_air <- sigmas_spm %>% mutate(outcome = 'SPM') %>% 
@@ -821,13 +822,13 @@ Test_QLR <- function(input_outcome){
     dplyr::select(tau, outcome, taub, tause) %>%
     mutate(category = 'water')
   
-  # For infant mortality rates with respect to CAT policy
-  sigmas_IM <- sigmas_IMCAT %>% mutate(outcome = 'IM_CAT') %>%
-    dplyr::select(tau, outcome, taub, tause) %>%
-    mutate(category = 'IM')
+  # # For infant mortality rates with respect to CAT policy
+  # sigmas_IM <- sigmas_IMCAT %>% mutate(outcome = 'IM_CAT') %>%
+  #   dplyr::select(tau, outcome, taub, tause) %>%
+  #   mutate(category = 'IM')
   
   # Final organized dataset for QLR test
-  sigmas_QLR <- rbind(sigmas_air, sigmas_water, sigmas_IM) %>%
+  sigmas_QLR <- rbind(sigmas_air, sigmas_water) %>%
     mutate(breakpt_temp = 0, breaktd_temp = 0)
   
   # Obtain the index range for the middle 50% taus

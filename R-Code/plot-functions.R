@@ -29,11 +29,11 @@
 ### --------------------------
 ### Set up basics for plotting
 ###
-plotTheme <- function(base_size = 12, title_size = 16) {
+plotTheme <- function(base_size = 8, title_size = 14) {
   theme(
     text = element_text(color = "black"),
     plot.title = element_text(size = title_size, colour = "black"), 
-    plot.subtitle = element_text(face="italic"),
+    plot.subtitle = element_text(size = base_size, face="italic"),
     plot.caption = element_text(hjust=0),
     axis.ticks = element_blank(),
     panel.background = element_blank(),
@@ -84,8 +84,7 @@ Plot_Event_Study_Estimates <- function(input_outcome){
       scale_y_continuous(name = ylab_textSC, breaks = y_breaksSC, limits = y_limitsSC) + 
       plotTheme()
   
-    SC_plot <- SC_plot + labs(subtitle = 'Effects of Supreme Court Action Plan on Particulate Matter')
-    print(SC_plot)
+    SC_plot <- SC_plot + labs(caption = 'A.Effects of Supreme Court Action Plan on Particulate Matter')
     
     CAT_plot <- ggplot(data = data_for_plot) +
       geom_point(aes(tauCAT, norm_taubCAT),color='darkgreen') +
@@ -96,8 +95,11 @@ Plot_Event_Study_Estimates <- function(input_outcome){
       scale_y_continuous(name = ylab_textCAT, breaks = y_breaksCAT, limits = y_limitsCAT) + 
       plotTheme()
     
-    CAT_plot <- CAT_plot + labs(subtitle = 'Effects of Catalytic Converters Policy on Particulate Matter')
-    print(CAT_plot)
+    CAT_plot <- CAT_plot + labs(caption = 'B.Effects of Catalytic Converters Policy on Particulate Matter')
+    png(file = paste0("./Plot/Results/", input_outcome,'_Event_Study_Estimates.png'), width=1800, height=900, res=72*3)
+    combined_plot <- grid.arrange(SC_plot, CAT_plot, ncol=2)
+    # print(combined_plot)
+    dev.off()
   }
   else if(input_outcome == "SO2"){
     data_for_plot = SO2_sigmas
@@ -123,8 +125,7 @@ Plot_Event_Study_Estimates <- function(input_outcome){
       scale_y_continuous(name = ylab_textSC, breaks = y_breaksSC, limits = y_limitsSC) + 
       plotTheme()
     
-    SC_plot <- SC_plot + labs(subtitle = 'Effects of Supreme Court Action Plan on Sulfur Dioxide')
-    print(SC_plot)
+    SC_plot <- SC_plot + labs(caption = 'A.Effects of Supreme Court Action Plan on Sulfur Dioxide')
     
     CAT_plot <- ggplot(data = data_for_plot) +
       geom_point(aes(tauCAT, norm_taubCAT),color='darkgreen') +
@@ -135,9 +136,11 @@ Plot_Event_Study_Estimates <- function(input_outcome){
       scale_y_continuous(name = ylab_textCAT, breaks = y_breaksCAT, limits = y_limitsCAT) + 
       plotTheme()
     
-    CAT_plot <- CAT_plot + labs(subtitle = 'Effects of Catalytic Converters Policy on Sulfur Dioxide')
-    print(CAT_plot)
-    
+    CAT_plot <- CAT_plot + labs(caption = 'B.Effects of Catalytic Converters Policy on Sulfur Dioxide')
+    png(file = paste0("./Plot/Results/", input_outcome,'_Event_Study_Estimates.png'), width=1800, height=900, res=72*3)
+    combined_plot <- grid.arrange(SC_plot, CAT_plot, ncol=2)
+    # print(combined_plot)
+    dev.off()
   }
   else if(input_outcome == "NO2"){
     data_for_plot = NO2_sigmas
@@ -163,8 +166,7 @@ Plot_Event_Study_Estimates <- function(input_outcome){
       scale_y_continuous(name = ylab_textSC, breaks = y_breaksSC, limits = y_limitsSC) + 
       plotTheme()
     
-    SC_plot <- SC_plot + labs(subtitle = 'Effects of Supreme Court Action Plan on Nitrogen Dioxide')
-    print(SC_plot)
+    SC_plot <- SC_plot + labs(caption = 'A.Effects of Supreme Court Action Plan on Nitrogen Dioxide')
     
     CAT_plot <- ggplot(data = data_for_plot) +
       geom_point(aes(tauCAT, norm_taubCAT),color='darkgreen') +
@@ -175,8 +177,11 @@ Plot_Event_Study_Estimates <- function(input_outcome){
       scale_y_continuous(name = ylab_textCAT, breaks = y_breaksCAT, limits = y_limitsCAT) + 
       plotTheme()
     
-    CAT_plot <- CAT_plot + labs(subtitle = 'Effects of Catalytic Converters Policy on Nitrogen Dioxide')
-    print(CAT_plot)
+    CAT_plot <- CAT_plot + labs(caption = 'B.Effects of Catalytic Converters Policy on Nitrogen Dioxide')
+    png(file = paste0("./Plot/Results/", input_outcome,'_Event_Study_Estimates.png'), width=1800, height=900, res=72*3)
+    combined_plot <- grid.arrange(SC_plot, CAT_plot, ncol=2)
+    # print(combined_plot)
+    dev.off()
   }
   else{
     if(input_outcome == "BOD"){
@@ -186,7 +191,7 @@ Plot_Event_Study_Estimates <- function(input_outcome){
       x_limits= c(-7,-6,-3,0,3,6,9,10)
       y_breaks = seq(-2, 8, 2)
       y_limits = c(-2,8)
-      subtitle_ = "Effects of National River Conservation Plan on Biochemical Oxygen Demand"
+      caption_ = "Effects of National River Conservation Plan on Biochemical Oxygen Demand"
     }
     else if(input_outcome == "LNFCOLI"){
       data_for_plot = LNFCOLI_sigmas
@@ -195,7 +200,7 @@ Plot_Event_Study_Estimates <- function(input_outcome){
       x_limits= c(-7,-6,-3,0,3,6,9,10)
       y_breaks = seq(-1.5, 0.5, 0.5)
       y_limits = c(-1.5,0.5)
-      subtitle_ = "Effects of National River Conservation Plan on Log-transformed Fecal Coliforms"
+      caption_ = "Effects of National River Conservation Plan on Log-transformed Fecal Coliforms"
     }
     else if(input_outcome == "DO"){
       data_for_plot = DO_sigmas
@@ -204,7 +209,7 @@ Plot_Event_Study_Estimates <- function(input_outcome){
       x_limits= c(-7,-6,-3,0,3,6,9,10)
       y_breaks = seq(-0.4, 0.2, 0.2)
       y_limits = c(-0.43,0.24)
-      subtitle_ = "Effects of National River Conservation Plan on Dissolved Oxygen"
+      caption_ = "Effects of National River Conservation Plan on Dissolved Oxygen"
     }
     else if(input_outcome == "IM_CAT"){
       data_for_plot = IM_CAT_sigmas
@@ -213,12 +218,13 @@ Plot_Event_Study_Estimates <- function(input_outcome){
       x_limits= c(-10,-5,0,5)
       y_breaks = seq(-4, 4, 2)
       y_limits = c(-5,4)
-      subtitle_ = "Effects of Catalytic Converters Policy on Infant Mortality Rate"
+      caption_ = "Effects of Catalytic Converters Policy on Infant Mortality Rate"
     }
     else{
       stop('The outcome specified is not valid. 
            \n Please use one of the following: "SPM" "NO2" "SO2" "BOD" "LNFCOLI" "DO" "IM_CAT"')
     }
+    
     plot <- ggplot(data = data_for_plot) +
       geom_point(aes(tau, norm_taub),color='darkgreen') +
       geom_line(aes(tau, norm_taub),color='darkgreen') + 
@@ -227,9 +233,10 @@ Plot_Event_Study_Estimates <- function(input_outcome){
       scale_x_discrete(name = xlab_text, limits = x_limits) + 
       scale_y_continuous(name = ylab_text, breaks = y_breaks, limits = y_limits) + 
       plotTheme()
-    
-    plot <- plot + labs(subtitle = subtitle_)
-    print(plot)
+    png(file = paste0("./Plot/Results/", input_outcome,'_Event_Study_Estimates.png'), width=1080, height=900, res=72*3)
+    plot_out <- plot + labs(caption = caption_)
+    print(plot_out)
+    dev.off()
   }
 }
 
@@ -256,16 +263,18 @@ Plot_Fstats <- function(input_outcome){
     outcomeplot = "Infant Mortality Rate"
   }
   
-  # png(file = paste0("./Data-Replication/Results/", input_outcome,'_Fstats.png'), width=400, height=300)
+  png(file = paste0("./Plot/Results/", input_outcome,'_Fstats.png'), width=1080, height=900, res=72*3)
   Fplot <- as.data.frame(cbind(pot_breakpt, Fstats))
   a <- ggplot(data=Fplot) +
     geom_line(aes(pot_breakpt, Fstats), color="blue")+ 
-    geom_hline(yintercept = max(Fstats), color="gray", linetype=5) + 
+    geom_hline(yintercept = max(Fstats), color="gray", linetype=5) +
+    geom_vline(xintercept = 0 ,color="red",linetype=2) + 
     geom_vline(xintercept = which.max(Fstats) - (1 - (min(pot_breakpt))),color="gray",linetype=5) + 
     xlab("Event time") +
     ylab("F-statistics") + xlim(xlim_)+
     plotTheme() + 
-    labs(subtitle = outcomeplot)
+    labs(title = paste0("F-statistics for ", outcomeplot),
+         caption = paste0("Quandt Likelihood Ratio Test on ", outcomeplot, " trend"))
   print(a)
-  # dev.off()
+  dev.off()
 }

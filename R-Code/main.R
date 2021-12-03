@@ -40,6 +40,7 @@
 library(foreign)
 library(ggplot2)
 library(dplyr)
+library(gridExtra)
 library(biostat3) # for "lincom" method used in 2nd-stage regression to test the five-year effects of policies
 
 # Disable scientific notation for data within 200 digits for better display
@@ -69,11 +70,12 @@ dat_ext <- read.csv("./Data-Extension/data1990_2015.csv")
 ## 1.MAIN PROGRAM ##
 ####################
 
---------------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------
 # Necessary "names" to match each policy outcome with the corresponding column for data processing
-air = c("SPM", "NO2", "SO2")
-water = c("BOD", "LNFCOLI", "DO")
-IM = c("IM_CAT")
+
+air <- c("SPM", "NO2", "SO2")
+water <- c("BOD", "LNFCOLI", "DO")
+IM <- c("IM_CAT")
 AllOutcomes <- c(air, water, IM)
 
 
@@ -113,8 +115,8 @@ for(outcome in AllOutcomes){
 # ----------------------------
 # Quandt Likelihood Ratio Test
 QLR_results <- rbind(Test_QLR('SPM'), Test_QLR('SO2'), Test_QLR('NO2'),
-                     Test_QLR('BOD'), Test_QLR('LNFCOLI'), Test_QLR('DO'),
-                     Test_QLR('IM_CAT'))
+                     Test_QLR('BOD'), Test_QLR('LNFCOLI'), Test_QLR('DO'))
+                     #,Test_QLR('IM_CAT'))
 
 
 #####################
