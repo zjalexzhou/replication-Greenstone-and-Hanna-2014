@@ -5,6 +5,7 @@ This is the final project repository for **PUBPOL 870K: Statistics & Program Eva
 Group Member: Yixin Fang, Yiming Li, Xinkai Wang, Weichen Xu, Zhijie Zhou
 
 *Instructor: Prof. Jiahua Yue*
+
 *Teaching Assistant: Xudong Ren* 
 
 Full-text + Author-released data & STATA programs available at: https://www.aeaweb.org/articles?id=10.1257/aer.104.10.3038
