@@ -31,7 +31,7 @@ library(biostat3) # ver 0.1.6
 
 ## Abstract
 
-
+Inspections of environmental regulation effects in developing countries are important. Greenstone & Hanna (2014) took a deep insight into the performance of India’s air and water regulations, including the Supreme Court Action Plans (SCAP), the Catalytic Converter Policies (CAT), and the National River Conservation Plan (NRCP). The authors applied a difference-in-difference (DID) design using a two-stage econometric approach based on their organized city-level panel data for the years 1986-2007.  Results have shown the association between the catalytic converter policies and substantial improvement in air quality, while no measurable benefits have been found for water regulations. In addition, the authors determined a modest relationship between the decline in infant mortality rate and successful air regulations, though the relationships were not statistically significant. The parallel-trend assumption for DID was tested by Quandt Likelihood Ratio (QLR). We managed to use the R language to replicate their main findings and apply a preliminary DID approach to study the effects of the 2008 Economic Crisis on the effects of air policies. Only CAT was still likely to sustain their influence albeit disturbed by the crisis. Further research may take spatial insights and systematic homogeneity among cities in response to policies or events into consideration.
 
 ## Program Outline
 
