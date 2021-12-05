@@ -41,6 +41,8 @@ library(foreign)
 library(ggplot2)
 library(dplyr)
 library(biostat3) # for "lincom" method used in 2nd-stage regression to test the five-year effects of policies
+library(lubridate)
+library(gridExtra)
 
 # Disable scientific notation for data within 200 digits for better display
 options(scipen = 200)
@@ -116,6 +118,13 @@ for(outcome in AllOutcomes){
 QLR_results <- rbind(Test_QLR('SPM'), Test_QLR('SO2'), Test_QLR('NO2'),
                      Test_QLR('BOD'), Test_QLR('LNFCOLI'), Test_QLR('DO'))
                      #,Test_QLR('IM_CAT'))
+
+
+# ------------------------------------------------------------
+# DID - Effects of the 2008 Economic Crisis on Policy Effects?
+SPM_crisis_estimates <- Get_Crisis_DID_Effects("SPM")
+SO2_crisis_estimates <- Get_Crisis_DID_Effects("SO2")
+NO2_crisis_estimates <- Get_Crisis_DID_Effects("NO2")
 
 
 #####################

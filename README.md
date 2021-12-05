@@ -25,6 +25,8 @@ library(foreign) # ver 0.8.81
 library(ggplot2) # ver 3.3.5
 library(dplyr) # ver 1.0.7
 library(biostat3) # ver 0.1.6
+library(lubridate) # ver 1.8.0
+library(gridExtra) # ver 2.3
 ```
 
 <small>Hint: You can check your package verison in R by `packageVersion("Name_of_the_package")`.</small>	
@@ -37,13 +39,16 @@ Inspections of environmental regulation effects in developing countries are impo
 
 `main.R` --> Run all codes in this file.
 
--------> `main-functions` : all functions needed to replicate the data analysis/regression tasks for the main replication program
+> --> 0.ENVIRONMENT SETUP & DATA IMPORT
+> --> 1.MAIN PROGRAM
+> --> 2.VISUALIZATION
 
--------> `plot-functions` : all functions needed to visualize the results for the main replication program
+-------> `main-functions.R` : all functions needed to replicate the data analysis/regression tasks for the main replication program
 
--------> `extension-functions`: all functions needed to go over the preliminary extension task (of the 2008 Economic Crisis as an event)
+-------> `plot-functions.R` : all functions needed to visualize the results for the main replication program
+
+-------> `extension-functions.R`: all functions needed to go over the preliminary extension task (of the 2008 Economic Crisis as an event)
+<small> Note: we corrected an error in the code about two-way fix effects. The older version of `extension-functions.R` used to prepare our manuscript wrongly coded the `year` variable as dummies rather than the actual year. We were supposed to control the effects of each numerical year using `as.factor(year)`. This may result in a discrepancy between the result shown in the extension section (Table 10) of our original manuscript and the output of our updated code but should not affect the preliminary conclusion since the statistical significance of our results did not vary (only slight shift in regression estimates). (Dec 5, 2021, by Zhijie) </small>
 
 ## Reference
-
-Greenstone, Michael, and Rema Hanna. 2014. "Environmental Regulations, Air and Water Pollution, and Infant Mortality in India." American Economic Review, 104 (10): 3038-72.
-DOI: 10.1257/aer.104.10.3038
+Greenstone, Michael, and Rema Hanna. 2014. "Environmental Regulations, Air and Water Pollution, and Infant Mortality in India." *American Economic Review*, 104 (10): 3038-72. DOI: 10.1257/aer.104.10.3038

@@ -1,6 +1,6 @@
 # ------------------------------------------------------------------------------------------------------
 # File: plot-functions.R 
-# Modified: Dec 3, 2021
+# Last Modified: Dec 3, 2021
 #
 # Replication of "Environmental Regulations, Air and Water Pollution, and Infant Mortality in India" (Greenstone and Hanna, 2014)
 # 
