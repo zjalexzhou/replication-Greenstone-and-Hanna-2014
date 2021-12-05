@@ -48,6 +48,7 @@ Inspections of environmental regulation effects in developing countries are impo
 -------> `plot-functions.R` : all functions needed to visualize the results for the main replication program
 
 -------> `extension-functions.R`: all functions needed to go over the preliminary extension task (of the 2008 Economic Crisis as an event)
+
 <small> Note: we corrected an error in the code about two-way fix effects. The older version of `extension-functions.R` used to prepare our manuscript wrongly coded the `year` variable as dummies rather than the actual year. We were supposed to control the effects of each numerical year using `as.factor(year)`. This may result in a discrepancy between the result shown in the extension section (Table 10) of our original manuscript and the output of our updated code but should not affect the preliminary conclusion since the statistical significance of our results did not vary (only slight shift in regression estimates). (Dec 5, 2021, by Zhijie) </small>
 
 ## Reference
